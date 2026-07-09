@@ -123,9 +123,6 @@
     setRing(holdProgress);
     if (!reducedMotion.matches) {
       drawPreGlow(holdProgress);
-      const j = holdProgress * 1.4;
-      jitter.style.transform =
-        `translate(${(Math.random() - 0.5) * j}px, ${(Math.random() - 0.5) * j}px)`;
     }
     if (holdProgress >= 0.55) btn.classList.add("hot");
     if (holdProgress >= 1) { ignite(); return; }
