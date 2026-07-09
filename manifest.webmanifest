@@ -1,0 +1,17 @@
+{
+  "name": "Burn Journal",
+  "short_name": "Burn Journal",
+  "description": "Write it down. Let it go. Nothing is ever saved.",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#131110",
+  "theme_color": "#131110",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

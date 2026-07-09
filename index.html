@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Burn Journal</title>
+  <meta name="description" content="Write it down. Let it go. Nothing is ever saved." />
+  <meta name="theme-color" content="#131110" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="icon.svg" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="app">
+    <header class="topbar" aria-hidden="true">
+      <span class="wordmark">Burn Journal</span>
+    </header>
+
+    <div class="stage" id="stage">
+      <div class="jitter" id="jitter">
+        <section class="paper" id="paper" aria-label="Your journal page">
+          <p class="paper-date" id="paperDate">—</p>
+          <textarea
+            id="letter"
+            class="letter"
+            placeholder="Write down what's weighing on you, then let it go."
+            autocomplete="off"
+            autocorrect="off"
+            autocapitalize="sentences"
+            spellcheck="false"
+            enterkeyhint="enter"
+            aria-label="Write here. It is never saved."
+          ></textarea>
+        </section>
+      </div>
+      <canvas id="fx" aria-hidden="true"></canvas>
+    </div>
+
+    <div class="controls">
+      <button id="burnBtn" class="burn-btn" type="button" aria-disabled="true"
+        aria-label="Press and hold to burn this page">
+        <svg class="ring" viewBox="0 0 72 72" aria-hidden="true">
+          <circle class="ring-track" cx="36" cy="36" r="31" />
+          <circle class="ring-fill" id="ringFill" cx="36" cy="36" r="31" />
+        </svg>
+        <svg class="flame" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2c.6 3.2-.8 4.9-2.4 6.6C7.9 10.4 6 12.3 6 15.3 6 19 8.8 22 12 22s6-3 6-6.7c0-2-.8-3.7-1.9-5.2-.3 1-.9 1.9-1.8 2.4.3-3.5-.6-7.6-2.3-10.5Zm.2 12.1c1 1 1.6 2 1.6 3.2 0 1.5-.8 2.7-1.9 2.7s-1.9-1.2-1.9-2.7c0-1.5.9-2.3 2.2-3.2Z"/>
+        </svg>
+      </button>
+      <p class="btn-label" id="btnLabel">Hold to burn</p>
+      <p class="hint">Nothing is saved, sent, or stored. It only burns.</p>
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
