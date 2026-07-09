@@ -46,7 +46,6 @@ body {
 .wordmark {
   font-size: 13px;
   letter-spacing: 0.14em;
-  text-transform: uppercase;
   color: var(--ink-faint);
   user-select: none;
 }
@@ -214,7 +213,6 @@ body {
   margin: 0;
   font-size: 13px;
   letter-spacing: 0.12em;
-  text-transform: uppercase;
   color: var(--ink-faint);
 }
 
