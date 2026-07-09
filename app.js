@@ -15,7 +15,7 @@
 
   const RING_C        = 194.8;   // ring circumference (2π·31)
   const HOLD_MS       = 1000;    // press-and-hold time to ignite
-  const BURN_MS       = 2400;    // bottom-to-top burn duration
+  const BURN_MS       = 4800;    // bottom-to-top burn duration
   const PAD           = 60;      // canvas overflow around the paper (for sparks)
   const FRONT_AMP     = 26;      // jaggedness of the burn front, px
   const SAMPLES       = 34;      // burn-front resolution
@@ -84,11 +84,16 @@
 
   const easeInOut = (p) => (p < 0.5 ? 2 * p * p : 1 - ((-2 * p + 2) ** 2) / 2);
 
-  /* Burn-front y for a normalized x at eased progress f and time t (seconds) */
+  /* Burn-front y for a normalized x at eased progress f and time t (seconds).
+     Starts just below the paper (f=0) and finishes flat at the paper's top
+     edge (f=1) — never traveling above the page into the header. The jagged
+     amplitude fades to zero as the front arrives, so the last sliver clears
+     cleanly right at y=0. */
   function frontAt(xn, f, t) {
-    const travel = box.h + FRONT_AMP * 2 + 70;
-    const base = box.h + FRONT_AMP + 20 - f * travel;
-    return base + noiseFn(xn, t) * FRONT_AMP;
+    const startY = box.h + FRONT_AMP + 20;   // begins below the paper bottom
+    const base = startY * (1 - f);           // reaches 0 (paper top) at f=1
+    const amp = FRONT_AMP * (1 - f);         // jaggedness collapses at the top
+    return base + noiseFn(xn, t) * amp;
   }
 
   /* ————— Hold-to-ignite ————— */
@@ -246,6 +251,12 @@
     ctx.translate(PAD, 0); // x offset; y already matches (canvas top = paper top - PAD)
     const oy = PAD;        // y offset applied per point
 
+    // Confine every ember, spark, and char stroke to the page — nothing is
+    // allowed to paint above the paper's top edge, up into the header.
+    ctx.beginPath();
+    ctx.rect(-PAD, oy, box.w + PAD * 2, box.h + PAD * 2);
+    ctx.clip();
+
     const tracePath = (dy = 0) => {
       ctx.beginPath();
       pts.forEach(([x, y], i) => {
@@ -333,6 +344,10 @@
       ctx.clearRect(0, 0, box.w + PAD * 2, box.h + PAD * 2);
       ctx.save();
       ctx.translate(PAD, 0);
+      // Keep the drifting embers within the page, same as during the burn.
+      ctx.beginPath();
+      ctx.rect(-PAD, PAD, box.w + PAD * 2, box.h + PAD * 2);
+      ctx.clip();
       ctx.globalCompositeOperation = "lighter";
       const dt = 1 / 60;
       sparks = sparks.filter((sp) => (sp.age += dt) < sp.life);
