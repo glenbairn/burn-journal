@@ -85,15 +85,17 @@
   const easeInOut = (p) => (p < 0.5 ? 2 * p * p : 1 - ((-2 * p + 2) ** 2) / 2);
 
   /* Burn-front y for a normalized x at eased progress f and time t (seconds).
-     Starts just below the paper (f=0) and finishes flat at the paper's top
-     edge (f=1) — never traveling above the page into the header. The jagged
-     amplitude fades to zero as the front arrives, so the last sliver clears
-     cleanly right at y=0. */
+     The jagged band keeps its full amplitude the whole way up: it starts with
+     its leading edge at the paper's bottom (f=0) and travels until every jag
+     has crossed the top (f=1). The canvas clip confines drawing to the page,
+     so each jagged peak simply disappears as it reaches the top edge — no
+     flattening. Since noise ∈ [-1,1], front = FRONT_AMP·(noise−1) ≤ 0 at f=1,
+     so the page clears completely. */
   function frontAt(xn, f, t) {
-    const startY = box.h + FRONT_AMP + 20;   // begins below the paper bottom
-    const base = startY * (1 - f);           // reaches 0 (paper top) at f=1
-    const amp = FRONT_AMP * (1 - f);         // jaggedness collapses at the top
-    return base + noiseFn(xn, t) * amp;
+    const startY = box.h + FRONT_AMP;        // jagged band's top edge at paper bottom
+    const endY = -FRONT_AMP;                 // whole band past the top edge
+    const base = startY + (endY - startY) * f;
+    return base + noiseFn(xn, t) * FRONT_AMP;
   }
 
   /* ————— Hold-to-ignite ————— */
